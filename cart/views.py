@@ -14,8 +14,8 @@ def view_cart(request):
         # Calculer le sous-total de chaque élément du panier et récupérer les quantités de stock
         for cart_item in cart_items:
             cart_item.update_subtotal()
-            size = cart_item.size
-            quantity = cart_item.product.get_stock_quantity(size)
+            km = cart_item.km
+            quantity = cart_item.product.get_stock_quantity(km)
             cart_item.stock_quantity = quantity
 
         # Calculer les frais de livraison
@@ -51,12 +51,12 @@ def view_cart(request):
 @login_required(login_url='login')
 def add_to_cart(request):
     product_id = request.GET.get('product_id')
-    size = request.GET.get('size')
+    km = request.GET.get('km')
     quantity = int(request.GET.get('quantity', 1))
 
     product = get_object_or_404(Product, pk=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product, size=size)
+    cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product, km=km)
 
     if item_created:
         cart_item.quantity = quantity
@@ -64,7 +64,7 @@ def add_to_cart(request):
         cart_item.quantity += quantity
 
     # Vérifier si la quantité ne dépasse pas le stock disponible pour la taille sélectionnée
-    stock_quantity = product.get_stock_quantity(size)  # Récupérer la quantité de stock pour la taille sélectionnée
+    stock_quantity = product.get_stock_quantity(km)  # Récupérer la quantité de stock pour la taille sélectionnée
     if cart_item.quantity > stock_quantity:
         cart_item.quantity = stock_quantity
 
@@ -75,18 +75,18 @@ def add_to_cart(request):
 
     messages.success(request, f"{product.name} added to cart.")
 
-    return redirect('cart')
+    return redirect('product')
 
 
 
 
-def remove_from_cart(request, product_id, size):
+def remove_from_cart(request, product_id, km):
     cart = Cart.objects.get(user=request.user)
     product = Product.objects.get(id=product_id)
-    cart_item = CartItem.objects.get(cart=cart, product=product, size=size)
+    cart_item = CartItem.objects.get(cart=cart, product=product, km=km)
     
     # Restaurer la quantité du produit dans le stock
-    product.stock[size] += cart_item.quantity
+    product.stock[km] += cart_item.quantity
     product.save()
     
     cart_item.delete()
@@ -106,7 +106,7 @@ def checkout(request):
     # Vérifier si le stock est suffisant pour chaque produit dans le panier avant de créer la commande
     stock_is_sufficient = True
     for cart_item in cart_items:
-        stock_quantity = cart_item.product.get_stock_quantity(cart_item.size)
+        stock_quantity = cart_item.product.get_stock_quantity(cart_item.km)
         if cart_item.quantity > stock_quantity:
             stock_is_sufficient = False
             messages.warning(request, f"Insufficient stock for {cart_item.product.name}. Maximum available quantity: {stock_quantity}")
@@ -131,12 +131,12 @@ def checkout(request):
                 OrderItem.objects.create(
                     order=order,
                     product=item.product,
-                    size=item.size,
+                    km=item.km,
                     quantity=item.quantity,
                 )
 
                 # Retirer le stock du produit
-                item.product.stock[item.size] -= item.quantity
+                item.product.stock[item.km] -= item.quantity
                 item.product.save()
 
             # Vider le panier
@@ -199,7 +199,7 @@ def update_cart(request):
             new_quantity = int(request.POST.get(quantity_key))
             
             # Vérifier si la nouvelle quantité est valide
-            stock_quantity = cart_item.product.get_stock_quantity(cart_item.size)
+            stock_quantity = cart_item.product.get_stock_quantity(cart_item.km)
             if new_quantity > stock_quantity:
                 messages.warning(request, f"Invalid quantity for {cart_item.product.name}. Maximum available quantity: {stock_quantity}")
             else:

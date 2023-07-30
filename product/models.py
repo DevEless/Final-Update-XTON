@@ -22,10 +22,10 @@ class Product(models.Model):
     price = models.PositiveIntegerField()
     promo = models.PositiveIntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     stock = JSONField(default=dict)
-    selected_size = models.CharField(max_length=10, default='S')
+    selected_km = models.CharField(max_length=20, default='0-10,000 km')
     
-    def get_stock_quantity(self, size):
-        return self.stock.get(size, 0)
+    def get_stock_quantity(self, km):
+        return self.stock.get(km, 0)
 
     def __str__(self):
         return self.name

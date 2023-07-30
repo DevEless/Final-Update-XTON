@@ -42,7 +42,7 @@
         {% for item in order.order_items.all %}
         <tr>
             <td><img src="{{ item.product.img1 }}" style="width: 50px;" alt="item"> {{ item.product.name }}</td>
-            <td style="vertical-align: middle;">{{ item.size }}</td>
+            <td style="vertical-align: middle;">{{ item.km }}</td>
             <td style="vertical-align: middle;">{{ item.quantity }}</td>
             <td style="vertical-align: middle;">{{ item.product.price }}</td>
             <td style="vertical-align: middle;">{{ item.get_total }}</td>

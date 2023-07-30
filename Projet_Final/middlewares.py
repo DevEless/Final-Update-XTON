@@ -6,7 +6,7 @@ class RoleMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path.startswith('/backoffic/'):
+        if request.path.startswith('/backoffice/'):
             if not request.user.is_authenticated or request.user.role.value != 'Admin':
                 return redirect("home")
         

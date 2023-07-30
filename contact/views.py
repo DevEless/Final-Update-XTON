@@ -32,7 +32,7 @@ def newsletter(request):
         # Valider l'e-mail ici (vous pouvez utiliser des outils de validation intégrés ou des bibliothèques externes)
 
         # Envoie de l'e-mail de confirmation
-        subject = 'Confirmation de réception de votre inscription à la newsletter'
+        subject = 'newsleter'
         context = {'email': email}
         message = render_to_string('Projet_Final/front/newsletter.html', context)
 

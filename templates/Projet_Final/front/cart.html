@@ -68,7 +68,7 @@
                             
                                     <td class="product-name d-flex flex-column mt-4">
                                         <a href="{% url 'detail_Product' cart_item.product.id %}">{{ cart_item.product.name }}</a>
-                                        <span>{{ cart_item.size }}</span>
+                                        <span>{{ cart_item.km }}</span>
                                     </td>
                             
                                     <td class="product-price">
@@ -85,7 +85,7 @@
                                                                             
                                     <td class="product-subtotal">
                                         <span class="subtotal-amount">€ {{ cart_item.subtotal }}</span>
-                                        <a href="{% url 'remove_from_cart' cart_item.product.id cart_item.size %}" class="remove-btn"><i class="bx bx-trash"></i></a>
+                                        <a href="{% url 'remove_from_cart' cart_item.product.id cart_item.km %}" class="remove-btn"><i class="bx bx-trash"></i></a>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -295,7 +295,7 @@
                                 </div>
 
                                 <div class="products-size-wrapper">
-                                    <h4>Size:</h4>
+                                    <h4>km:</h4>
 
                                     <ul>
                                         <li><a href="#">XS</a></li>
@@ -345,13 +345,13 @@
           
                               <div class="products-content">
                                   <h3><a href="{% url 'detail_Product' cart_item.product.id %}">{{ cart_item.product.name }}</a></h3>
-                                  <span>{{ cart_item.product.color }} / {{ cart_item.size }}</span>
+                                  <span>{{ cart_item.product.color }} / {{ cart_item.km }}</span>
                                   <div class="products-price">
                                       <span>{{ cart_item.quantity }}</span>
                                       <span>x</span>
                                       <span class="price">{{ cart_item.subtotal }}</span>
                                   </div>
-                                  <a href="{% url 'remove_from_cart' cart_item.product.id cart_item.size %}" class="remove-btn"><i class="bx bx-trash"></i></a>
+                                  <a href="{% url 'remove_from_cart' cart_item.product.id cart_item.km %}" class="remove-btn"><i class="bx bx-trash"></i></a>
                               </div>
                           </div>
                           {% endfor %}

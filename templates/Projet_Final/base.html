@@ -251,6 +251,7 @@
                                 
                                 <form class="newsletter-form" method="POST" action="{% url 'newsletter' %}">
                                     {% csrf_token %}
+                                    {{ form.as_p }}
                                     <label>Your E-mail Address:</label>
                                     <input type="email" class="input-newsletter" placeholder="Enter your email" name="email" required autocomplete="off">
                                     <button type="submit">Subscribe</button>

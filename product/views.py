@@ -31,14 +31,14 @@ def createProduct(request):
     return render(request, 'Projet_Final/back/back_edit.html', {"form": form})
 
 
-def get_default_km(stock, selected_km):
+def get_default_km(kms, selected_km):
     available_kms = ['0-10,000 km', '10,000-30,000 km', '30,000-50,000 km', '50,000-70,000 km', '70,000+ km']
 
-    if selected_km in stock and selected_km in available_kms:
+    if selected_km in kms and selected_km in available_kms:
         return selected_km
     else:
         for km in available_kms:
-            if km in stock:
+            if km in kms:
                 return km
 
     return available_kms[0]
@@ -56,7 +56,7 @@ def readProduct(request, id):
     selected_km = request.GET.get('km', '0-10,000 km')  # Récupère le kilométrage sélectionné dans l'URL (par défaut '0-10,000 km')
 
     # Mettre à jour le "selected_km" en fonction du stock disponible
-    selected_km = get_default_km(show.stock, selected_km)
+    selected_km = get_default_km(kms, selected_km)
 
     stock_quantity = show.get_stock_quantity(selected_km)
 

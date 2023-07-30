@@ -13,7 +13,7 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
-    size = models.CharField(max_length=10, default='S')
+    km = models.CharField(max_length=20, default='0-10,000 km')
     
     def update_subtotal(self):
         self.subtotal = self.quantity * self.product.price
@@ -42,7 +42,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    size = models.CharField(max_length=10, default='S')
+    km = models.CharField(max_length=20, default='0-10,000 km')
 
     def __str__(self):
         return f"Order Item #{self.pk} ({self.product.name})"

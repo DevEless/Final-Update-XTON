@@ -37,22 +37,23 @@ def product(request, category_id=None):
     
     categories = Category.objects.all()
     
-    # Filtrage par taille
-    selected_size = request.GET.get('size')
-    if not selected_size:
-        selected_size = 'S'  # Par défaut, la taille sélectionnée est 'S'
+    # Filtrage par kms
+    selected_km = request.GET.get('km')
+    if not selected_km:
+        selected_km = '0-10,000 km'  # Par défaut, le kilométrage sélectionné est '0-10,000 km'
+
+    kms = ['0-10,000 km', '10,000-30,000 km', '30,000-50,000 km', '50,000-70,000 km', '70,000+ km']  # Liste des kilométrages disponibles
+
+    if selected_km:
+        products = products.filter(selected_km=selected_km)
+
     
-    sizes = ['S', 'M', 'L', 'XL', 'XXL']  # Liste des tailles disponibles
-    
-    if selected_size:
-        products = products.filter(selected_size=selected_size)
-    
-    # Filtrage par taille pour la catégorie sélectionnée
-    # if selected_size and active_category:
-    #     products = products.filter(category=active_category, stock__contains={selected_size: True})
+    # Filtrage par kms pour la catégorie sélectionnée
+    # if selected_km and active_category:
+    #     products = products.filter(category=active_category, stock__contains={selected_kms: True})
         
     for product in products:
-        product.stock_quantity = product.get_stock_quantity(selected_size)
+        product.stock_quantity = product.get_stock_quantity(selected_km)
     
     paginator = Paginator(products, 12)  # Spécifiez le nombre de produits par page (ici, 12)
     page_number = request.GET.get('page')
@@ -62,8 +63,8 @@ def product(request, category_id=None):
         'products': page_obj,
         'categories': categories,
         'active_category': active_category,
-        'selected_size': selected_size,
-        'sizes': sizes,  # Ajout de la variable 'sizes' dans le contexte
+        'selected_km': selected_km,
+        'kms': kms,  # Ajout de la variable 'kms' dans le contexte
         'wishlist_products': wishlist_products,
     })
 
@@ -123,7 +124,7 @@ def contact(request):
         context = {'name': name}
         message = render_to_string('Projet_Final/front/confirmation_email.html', context)
 
-        send_mail(subject, '', 'chrispandoulas@gmail.com', [email], html_message=message)
+        send_mail(subject, '', 'sortinglobster4@gmail.com', [email], html_message=message)
     
     return render(request, 'Projet_Final/front/contact.html', {'contacts' : contacts, 'wishlist_products': wishlist_products,})
 
@@ -175,7 +176,7 @@ def confirm_order(request, order_id):
     send_mail(
         'Order Confirmation',
         'Your order has been confirmed.',
-        'chrispandoulas@gmail.com',  # Remplacez par votre adresse e-mail
+        'sortinglobster4@gmail.com',  # Remplacez par votre adresse e-mail
         [order.user.email],
         fail_silently=False,
     )

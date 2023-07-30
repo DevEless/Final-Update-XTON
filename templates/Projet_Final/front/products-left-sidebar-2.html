@@ -76,11 +76,11 @@
                         </div>
                         
                         <div class="woocommerce-widget size-list-widget">
-                            <h3 class="woocommerce-widget-title">Size</h3>
+                            <h3 class="woocommerce-widget-title">Killometers</h3>
                             
                             <ul class="size-list-row">
-                                {% for size in sizes %}
-                                    <li{% if size == selected_size %} class="active"{% endif %}><a href="{% url 'product' %}">{{ size }}</a></li>
+                                {% for km in kms %}
+                                    <li{% if km == selected_km %} class="active"{% endif %}><a href="{% url 'product' %}">{{ km }}</a></li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -193,7 +193,12 @@
                                         <div class="price">
                                             <span class="new-price">€ {{ product.price }}</span>
                                         </div>
-                                        <a href="#" class="add-to-cart">Add to Cart</a>
+                                        <form action="{% url 'add_to_cart' %}" method="get">
+                                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                                            <input type="hidden" name="km" value="{{ selected_km }}">
+                                            <input id="quantity-input" type="hidden" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}">
+                                            <button type="submit" class="default-btn"><i class="add-to-cart"></i> Add to Cart</button>
+                                        </form>
                                     </div>
                                     
                                     {% if product.promo > 1 %}
@@ -401,8 +406,8 @@
                             <div class="products-size-wrapper">
                                 <h4>Size:</h4>
                                 <ul>
-                                    {% for size in sizes %}
-                                        <li{% if size == selected_size %} class="active"{% endif %}><a href="?size={{ size }}">{{ size }}</a></li>
+                                    {% for km in kms %}
+                                        <li{% if km == selected_km %} class="active"{% endif %}><a href="?km={{ km }}">{{ km }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </div>
@@ -416,7 +421,7 @@
                             
                                 <form action="{% url 'add_to_cart' %}" method="get">
                                     <input type="hidden" name="product_id" value="{{ product.id }}">
-                                    <input type="hidden" name="size" value="{{ selected_size }}">
+                                    <input type="hidden" name="km" value="{{ selected_km }}">
                                     <input id="quantity-input" type="hidden" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}">
                                     <button type="submit" class="default-btn"><i class="fas fa-cart-plus"></i> Add to Cart</button>
                                 </form>
@@ -452,13 +457,13 @@
       
                           <div class="products-content">
                               <h3><a href="{% url 'detail_Product' cart_item.product.id %}">{{ cart_item.product.name }}</a></h3>
-                              <span>{{ cart_item.product.color }} / {{ cart_item.size }}</span>
+                              <span>{{ cart_item.product.color }} / {{ cart_item.km }}</span>
                               <div class="products-price">
                                   <span>{{ cart_item.quantity }}</span>
                                   <span>x</span>
                                   <span class="price">{{ cart_item.subtotal }}</span>
                               </div>
-                              <a href="{% url 'remove_from_cart' cart_item.product.id cart_item.size %}" class="remove-btn"><i class="bx bx-trash"></i></a>
+                              <a href="{% url 'remove_from_cart' cart_item.product.id cart_item.km %}" class="remove-btn"><i class="bx bx-trash"></i></a>
                           </div>
                       </div>
                       {% endfor %}
@@ -712,13 +717,13 @@
                             <h3 class="woocommerce-widget-title">Price</h3>
 
                             <div class="collection-filter-by-price">
-                                <input class="js-range-of-price" type="text" data-min="0" data-max="1055"
+                                <input class="js-range-of-price" type="text" data-min="0" data-max="200 055"
                                     name="filter_by_price" data-step="10">
                             </div>
                         </div>
 
                         <div class="woocommerce-widget size-list-widget">
-                            <h3 class="woocommerce-widget-title">Size</h3>
+                            <h3 class="woocommerce-widget-title">Killometers</h3>
 
                             <ul class="size-list-row">
                                 <li><a href="#">20</a></li>
